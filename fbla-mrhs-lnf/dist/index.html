@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>FBLA MRHS LNF</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Header Section -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-purple-800">MRHS Lost & Found</h1>
+      <nav class="hidden md:flex space-x-6">
+        <a id="nav-home" href="#" class="transition duration-300">Home</a>
+        <a id="nav-items" href="#" class="transition duration-300">View Found Items</a>
+        <a id="nav-admin" href="#" class="text-gray-600 hover:text-purple-800 transition duration-300">Admin Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Home Page -->
+    <div id="home-page">
+      <div class="container mx-auto px-6 py-20 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Morton Ranch HS Lost & Found</h2>
+        <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">Find your lost belongings or claim them if found.</p>
+        <a id="view-items-btn" href="#" class="bg-purple-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-900 transition duration-300 inline-block text-lg shadow-lg">
+          View Found Items
+        </a>
+      </div>
+    </div>
+
+    <!-- Items Page -->
+    <div id="items-page" class="hidden">
+      <div class="container mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900">Search Found Items</h2>
+          <p class="text-gray-600 mt-2">Use the search bar below to filter items.</p>
+        </div>
+
+        <div class="search-container mb-8 max-w-lg mx-auto">
+          <input type="text" id="search-bar" placeholder="Search for keys, wallet, phone..." class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <div id="items-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+        <div id="no-results" class="hidden text-center py-10">
+          <p class="text-gray-500 text-lg">Sorry, no items match what you are looking for.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Login Page -->
+    <div id="admin-login-page" class="hidden">
+      <div class="container mx-auto px-6 py-20 max-w-md bg-white rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Admin Login</h2>
+        <form id="admin-login-form" class="flex flex-col gap-4">
+          <input type="email" id="admin-email" placeholder="Email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+          <input type="password" id="admin-password" placeholder="Password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+          <button type="submit" class="bg-purple-800 text-white font-semibold py-2 rounded-lg hover:bg-purple-900 transition duration-300">Login</button>
+        </form>
+        <p id="login-error" class="text-red-500 mt-4 hidden text-center">Invalid credentials, try again.</p>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard Page -->
+    <div id="admin-dashboard-page" class="hidden">
+      <div class="container mx-auto px-6 py-12">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-900">Admin Dashboard</h2>
+          <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">Logout</button>
+        </div>
+
+        <div id="admin-items-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <!-- Admin item cards will be rendered here -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Claim Item Modal -->
+  <div id="claim-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 text-center">
+      <h3 id="claim-modal-title" class="text-xl font-bold text-purple-800 mb-4">Confirm Claim</h3>
+      <p id="claim-modal-message" class="text-gray-700 mb-6">Are you sure you want to claim this item?</p>
+      <div class="flex justify-center gap-4">
+        <button id="claim-confirm-btn" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">Yes</button>
+        <button id="claim-cancel-btn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-300">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white mt-12 py-6 text-center">
+    <p class="text-black">2025 FBLA Website Coding and Development</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAdhKzgPM7OcBr7R37Qft8rEOqmxnNANUc",
+      authDomain: "fbla-lost-and-found-def70.firebaseapp.com",
+      projectId: "fbla-lost-and-found-def70",
+      storageBucket: "fbla-lost-and-found-def70.firebasestorage.app",
+      messagingSenderId: "154791511213",
+      appId: "1:154791511213:web:5ae44e159925868ac5b224"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // --- Page Elements ---
+    const homePage = document.getElementById('home-page');
+    const itemsPage = document.getElementById('items-page');
+    const adminLoginPage = document.getElementById('admin-login-page');
+    const adminDashboardPage = document.getElementById('admin-dashboard-page');
+
+    const navHome = document.getElementById('nav-home');
+    const navItems = document.getElementById('nav-items');
+    const navAdmin = document.getElementById('nav-admin');
+
+    const viewItemsBtn = document.getElementById('view-items-btn');
+
+    const itemsGrid = document.getElementById('items-grid');
+    const searchBar = document.getElementById('search-bar');
+    const noResults = document.getElementById('no-results');
+
+    const adminItemsGrid = document.getElementById('admin-items-grid');
+
+    const loginForm = document.getElementById('admin-login-form');
+    const loginError = document.getElementById('login-error');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // --- Modal Elements ---
+    const claimModal = document.getElementById('claim-modal');
+    const claimModalTitle = document.getElementById('claim-modal-title');
+    const claimModalMessage = document.getElementById('claim-modal-message');
+    const claimConfirmBtn = document.getElementById('claim-confirm-btn');
+    const claimCancelBtn = document.getElementById('claim-cancel-btn');
+    let currentClaimIndex = null;
+
+    // --- Sample Found Items ---
+    let foundItems = [
+      { title: 'Black Wallet', description: 'Black wallet near library.', image: 'https://placehold.co/600x400/6B21A8/FFFFFF?text=Wallet', claimed: false },
+      { title: 'iPhone 14', description: 'Blue iPhone in clear case.', image: 'https://placehold.co/600x400/6B21A8/FFFFFF?text=Phone', claimed: false },
+      { title: 'Set of Keys', description: 'Car key and 2 house keys.', image: 'https://placehold.co/600x400/6B21A8/FFFFFF?text=Keys', claimed: false },
+      { title: 'Utensil Kit', description: 'White and Blue Lunch Utensil Kit, in lunchroom', image: 'https://placehold.co/600x400/6B21A8/FFFFFF?text=Utensil Kit', claimed: false },
+      { title: 'Chemistry Notebook', description: 'Red Notebook with "Chemistry" in sharpie', image: 'https://placehold.co/600x400/6B21A8/FFFFFF?text=Notebook', claimed: false },
+    ];
+
+    // --- Functions ---
+    function showHomePage() { hideAllPages(); homePage.classList.remove('hidden'); setActiveNav(navHome); }
+    function showItemsPage() { hideAllPages(); itemsPage.classList.remove('hidden'); setActiveNav(navItems); displayItems(foundItems); }
+    function showAdminLoginPage() { hideAllPages(); adminLoginPage.classList.remove('hidden'); setActiveNav(navAdmin); }
+    function showAdminDashboard() { hideAllPages(); adminDashboardPage.classList.remove('hidden'); setActiveNav(null); renderAdminItems(); }
+    function hideAllPages() { homePage.classList.add('hidden'); itemsPage.classList.add('hidden'); adminLoginPage.classList.add('hidden'); adminDashboardPage.classList.add('hidden'); }
+    function setActiveNav(element) {
+      navHome.className = 'text-gray-600 hover:text-purple-800 transition duration-300';
+      navItems.className = 'text-gray-600 hover:text-purple-800 transition duration-300';
+      navAdmin.className = 'text-gray-600 hover:text-purple-800 transition duration-300';
+      if(element) element.className = 'text-purple-800 font-semibold border-b-2 border-purple-800 transition duration-300';
+    }
+
+    function displayItems(items) {
+      itemsGrid.innerHTML = '';
+      if(items.length === 0) { noResults.classList.remove('hidden'); itemsGrid.classList.add('hidden'); } 
+      else {
+        noResults.classList.add('hidden'); itemsGrid.classList.remove('hidden');
+        items.forEach((item, idx) => {
+          itemsGrid.innerHTML += `
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+              <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-900">${item.title}</h3>
+                <p class="text-gray-600 text-sm mb-4">${item.description}</p>
+                <button onclick="claimItem(${idx})" class="w-full bg-purple-800 text-white font-semibold py-2 rounded-lg hover:bg-purple-900 transition duration-300" ${item.claimed ? 'disabled class="bg-gray-400"' : ''}>
+                  ${item.claimed ? 'Claimed' : 'Claim Item'}
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    function renderAdminItems() {
+      adminItemsGrid.innerHTML = '';
+      foundItems.forEach((item, idx) => {
+        adminItemsGrid.innerHTML += `
+          <div class="bg-white rounded-lg shadow-md overflow-hidden p-4">
+            <h3 class="font-bold text-lg mb-2">${item.title}</h3>
+            <p class="text-gray-600 text-sm mb-4">${item.description}</p>
+            <p>Status: ${item.claimed ? 'Claimed' : 'Available'}</p>
+            <button onclick="toggleClaim(${idx})" class="mt-2 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300">
+              ${item.claimed ? 'Mark as Available' : 'Mark as Claimed'}
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    // --- Claim Item Modal Logic ---
+    window.claimItem = function(idx) {
+      const item = foundItems[idx];
+      if(item.claimed) return;
+      currentClaimIndex = idx;
+      claimModalTitle.textContent = `Claim "${item.title}"?`;
+      claimModalMessage.textContent = `Are you sure you want to claim "${item.title}"?`;
+      claimModal.classList.remove('hidden');
+    }
+    claimConfirmBtn.addEventListener('click', () => {
+      if(currentClaimIndex !== null) { foundItems[currentClaimIndex].claimed = true; displayItems(foundItems); currentClaimIndex = null; }
+      claimModal.classList.add('hidden');
+    });
+    claimCancelBtn.addEventListener('click', () => { currentClaimIndex = null; claimModal.classList.add('hidden'); });
+
+    window.toggleClaim = function(idx) { foundItems[idx].claimed = !foundItems[idx].claimed; renderAdminItems(); }
+
+    // --- Event Listeners ---
+    navHome.addEventListener('click', e => { e.preventDefault(); showHomePage(); });
+    navItems.addEventListener('click', e => { e.preventDefault(); showItemsPage(); });
+    navAdmin.addEventListener('click', e => { e.preventDefault(); showAdminLoginPage(); });
+    viewItemsBtn.addEventListener('click', e => { e.preventDefault(); showItemsPage(); });
+
+    searchBar.addEventListener('keyup', e => {
+      const term = e.target.value.toLowerCase();
+      displayItems(foundItems.filter(item => item.title.toLowerCase().includes(term) || item.description.toLowerCase().includes(term)));
+    });
+
+    logoutBtn.addEventListener('click', () => { signOut(auth).then(() => { showAdminLoginPage(); }); });
+
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value;
+      const password = document.getElementById('admin-password').value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => { loginError.classList.add('hidden'); showAdminDashboard(); })
+        .catch(err => { loginError.classList.remove('hidden'); });
+    });
+
+    onAuthStateChanged(auth, user => { if(user) showAdminDashboard(); else showHomePage(); });
+
+    // --- Initial State ---
+    showHomePage();
+  </script>
+
+</body>
+</html>
+    <script type="module" src="./script.js"></script>
+
+  </body>
+  
+</html>

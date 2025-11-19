@@ -1,0 +1,19 @@
+/* Modal slide-up animation */
+.modal-enter {
+  opacity: 0;
+  transform: translateY(50px);
+}
+.modal-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-out;
+}
+.modal-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.modal-exit-active {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.3s ease-in;
+}
